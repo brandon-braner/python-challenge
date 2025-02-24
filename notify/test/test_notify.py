@@ -123,3 +123,20 @@ def test_post_notification(
         assert nr.body == arg_note["body"]
     else:
         assert "detail" in resp.json()
+
+
+
+@pytest.mark.parametrize("arg_note, exp_status_code" [
+    (1, 204),
+    (4, 400)
+] )
+def test_mark_as_red(
+    session: Session,
+    client: TestClient,
+    testdata,
+    arg_note,
+    exp_status_code 
+):
+    resp = client.patch("notify/notification", json={"id": arg_note})
+
+    assert resp.status_code == exp_status_code

@@ -3,4 +3,5 @@ from .notification import (
     NotificationCategory,
     NotificationRequest,
     NotificationResponse,
+    NotificationReadRequest,
 )

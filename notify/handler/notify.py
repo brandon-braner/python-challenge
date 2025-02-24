@@ -5,7 +5,7 @@ from sqlalchemy.exc import NoResultFound
 
 from lib.data import DB
 from notify.data import notifications
-from notify.model import Notification, NotificationRequest, NotificationResponse
+from notify.model import Notification, NotificationRequest, NotificationReadRequest, NotificationResponse
 
 
 class Notify:
@@ -38,3 +38,17 @@ class Notify:
                 raise HTTPException(400, "No user found for this notification")
 
         return note.to_JSON()
+
+    def mark_notification_read(self, req: NotificationReadRequest) -> bool:
+        if req.id <= 0:
+            raise ValueError("Notification id must be greater then 0")
+        
+        with self.db.get_session() as session:
+            try:
+                notifications.set_as_read(session, req.id)
+                return True
+            except NoResultFound:
+                raise HTTPException(400, "Notification Not Found")
+            
+        return False
+            

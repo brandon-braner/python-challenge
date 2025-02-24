@@ -36,6 +36,8 @@ class Notification(CreationMetadataMixin, Base):
         index=True,
     )
 
+    is_read: Mapped[bool]
+
     @classmethod
     def from_JSON(self, nr: "NotificationRequest") -> Self:
         return self(**nr.model_dump())
@@ -51,6 +53,11 @@ class NotificationRequest(BaseModel):
     payload: dict[str, Any]
     is_push_notification: bool | None = None
     user_id: int
+    is_read: bool = False
+
+
+class NotificationReadRequest(BaseModel):
+    id: int
 
 
 class NotificationResponse(NotificationRequest):

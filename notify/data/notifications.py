@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from notify.model import Notification
@@ -36,3 +36,13 @@ def create(
     session.refresh(note)
 
     return note
+
+def set_as_read(session: Session, id: int) -> int:
+
+    session.execute(
+        update(Notification).where(Notification.id == id).values(is_read=True)
+    )
+    
+    session.commit()
+    return id
+
